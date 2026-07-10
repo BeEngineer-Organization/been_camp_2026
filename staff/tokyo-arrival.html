@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東京・横浜チーム 行き帰りスケジュール | BeEngineer Programming Camp</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- パスワード入力画面 -->
+    <div class="password-overlay" id="passwordOverlay">
+        <div class="password-box">
+            <h2>🔒 スタッフ専用ページ</h2>
+            <p>パスワードを入力してください</p>
+            <input 
+                type="password" 
+                id="passwordInput" 
+                class="password-input" 
+                placeholder="パスワード"
+                autocomplete="off"
+            >
+            <button id="passwordBtn" class="password-btn">ログイン</button>
+            <p id="passwordError" class="password-error"></p>
+        </div>
+    </div>
+
+    <!-- メインコンテンツ（パスワード認証後に表示） -->
+    <div class="content-hidden" id="mainContent">
+        <!-- ハンバーガー / サイドバー / オーバーレイ（共通コンポーネント / assets/sidebar.js が描画） -->
+        <div id="site-sidebar" data-variant="staff"></div>
+
+        <!-- メインコンテンツ -->
+        <main class="main-content">
+            <!-- ヘッダー -->
+            <section id="hero" class="hero">
+                <div class="hero-content">
+                    <div class="hero-panel">
+                        <span class="staff-badge">🔒 スタッフ専用</span>
+                        <h1 class="hero-title">東京・横浜チーム<br>行き帰りスケジュール</h1>
+                        <p class="hero-subtitle">BeEngineer Programming Camp<br>飯田橋校・横浜校（合宿参加者向け）</p>
+                        <div class="hero-date">8/8<small>(土)</small> 行き ／ 8/10<small>(月)</small> 帰り</div>
+                        <div class="hero-location">📍 ロゴスランド京都（京都府城陽市）</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 東京・横浜チーム 行き帰りスケジュール -->
+            <section id="tokyo-schedule" class="section">
+                <div class="container">
+                    <h2 class="section-title">行き帰りタイムスケジュール</h2>
+                    <p class="section-desc">
+                        合宿参加者（飯田橋校・横浜校）の移動詳細と、保護者へのお願い事項です。
+                    </p>
+
+                    <div class="arrival-tabs">
+                        <button class="arrival-tab-btn active" data-arrival-tab="outbound">
+                            <span class="arrival-time">8/8(土)</span>
+                            <span class="arrival-label">行き（のぞみ353号）</span>
+                        </button>
+                        <button class="arrival-tab-btn" data-arrival-tab="return">
+                            <span class="arrival-time">8/10(月)</span>
+                            <span class="arrival-label">帰り（のぞみ440号）</span>
+                        </button>
+                    </div>
+
+                    <div class="arrival-content active" id="outbound">
+                        <div data-travel-schedule="outbound"></div>
+                    </div>
+
+                    <div class="arrival-content" id="return">
+                        <div data-travel-schedule="return"></div>
+                    </div>
+
+                    <div class="travel-staff-notes">
+                        <h3>📋 スタッフ向けメモ</h3>
+                        <ul>
+                            <li><strong>行き：</strong>東京駅 18番線・6号車で合流 → 新横浜で乗車確認 → 13:15 プラムイン城陽着</li>
+                            <li><strong>帰り：</strong>13:00 現地昼食（各自負担）→ 14:29 バス発 → 16:06 京都発 → 18:02 新横浜 / 18:21 東京で解散</li>
+                            <li><strong>連絡：</strong>新幹線乗車前・下車前に参加者へ声かけ。座席番号・LINE登録の確認を</li>
+                            <li><strong>ICカード：</strong>JR在来線・バス利用のため、1000円以上チャージを事前案内</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- フッター（共通コンポーネント / assets/footer.js が描画） -->
+        <div id="site-footer"></div>
+    </div>
+
+    <script src="../assets/sidebar.js"></script>
+    <script src="tokyo-travel-data.js"></script>
+    <script src="tokyo-travel.js"></script>
+    <script src="../script.js"></script>
+    <script src="auth.js"></script>
+    <script src="../assets/footer.js"></script>
+</body>
+</html>
+
