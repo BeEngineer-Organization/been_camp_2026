@@ -70,7 +70,8 @@ a {
   left: 0;
   top: 0;
   width: var(--sidebar-width);
-  height: 100vh;
+  height: 100vh;      /* フォールバック */
+  height: 100dvh;     /* モバイルのアドレスバー可変分を考慮した実可視高さ */
   background: linear-gradient(180deg, var(--color-primary) 0%, #0a6d4d 100%);
   color: var(--color-white);
   padding: 1rem 0.8rem;
@@ -3378,7 +3379,8 @@ body.teacher-modal-open {
     top: 0;
     left: -100%;
     width: 280px;
-    height: 100vh;
+    height: 100vh;      /* フォールバック */
+    height: 100dvh;     /* モバイルのアドレスバー可変分を考慮した実可視高さ */
     background: linear-gradient(180deg, var(--color-primary) 0%, #0a6d4d 100%);
     padding: 1rem 0.8rem;
     z-index: 1500;
