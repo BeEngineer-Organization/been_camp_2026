@@ -198,15 +198,10 @@ function createBlogToast() {
 /**
  * サイドバー下：左キャラ（dot_girl）と右キャラ（dot_boy）の間に
  * 吹き出しを 1 つインラインで挿入する。
- * しっぽの向きはランダムで左（左キャラを指す）/右（右キャラを指す）。
+ * 文言は「今日の日付」に応じて出し分ける（→ getSidebarBubbleMessage）。
+ * ※ ランダム表示・しっぽの向きランダムは一旦解除。
  */
 function initSidebarCharacterBubbles() {
-  const COMMENTS = [
-    '準備をしよう',
-    '今日も頑張ろう',
-    '今日もお疲れさま',
-  ];
-
   const girl = document.querySelector('.sidebar-footer-char-left');
   const boy = document.querySelector('.sidebar-footer-char-right');
   if (!girl || !boy) return;
@@ -214,16 +209,118 @@ function initSidebarCharacterBubbles() {
   const footer = girl.parentNode;
   if (!footer || footer.querySelector('.sidebar-char-bubble')) return; // 二重挿入防止
 
+  const message = getSidebarBubbleMessage();
+  if (!message) return; // 表示しない日は吹き出しを作らない
+
   const bubble = document.createElement('span');
   bubble.className = 'sidebar-char-bubble';
-  // ランダムで左右の向き（しっぽがどちらのキャラを指すか）を決定
-  if (Math.random() < 0.5) {
-    bubble.classList.add('sidebar-char-bubble--right');
-  }
-  bubble.textContent = COMMENTS[Math.floor(Math.random() * COMMENTS.length)];
+  bubble.textContent = message;
 
   // 左キャラ ←[吹き出し]→ 右キャラ の順に並ぶよう、boy の直前に挿入
   footer.insertBefore(bubble, boy);
+}
+
+/**
+ * 合宿当日（8/8〜8/10）の吹き出し文言。日付ごとに「時間帯スロット」で管理する。
+ *
+ * ★★★ 文言の編集方法 ★★★
+ * ・各日は { from: '開始時刻', text: '文言' } の配列。
+ *   「今の時刻」が from を過ぎた最後のスロットが表示される。
+ *   例）14:00〜14:30 に出したい文言は from:'14:00'（次のスロット from:'14:30' まで有効）。
+ * ・1日の始まりは必ず from:'00:00' のスロットから書く。
+ * ・改行したいときは文中に \n を入れる（吹き出しは pre-line で改行を表示）。
+ * ・2日目(8/9)・3日目(8/10)は仮の文言。決まったら差し替えてください。
+ */
+const CAMP_SCHEDULE = {
+  // ── 1日目 8/8（土） ───────────────────────────────
+  '2026-08-08': [
+    { from: '00:00', text: 'いよいよ合宿開始！\n到着を待ってます！' },
+    { from: '14:00', text: '指示があるまで待機！' },
+    { from: '14:30', text: '開講式！' },
+    { from: '15:00', text: '授業中！' },
+    { from: '17:00', text: '夕食＆休憩中♪' },
+    { from: '19:00', text: '初日最後の授業！' },
+    { from: '21:00', text: 'お疲れ様でした！' },
+  ],
+  // ── 2日目 8/9（日）──────────────────────
+  '2026-08-09': [
+    { from: '00:00', text: '早く寝ましょう！' }, 
+    { from: '04:00', text: 'おはよう！\n合宿2日目！' }, 
+    { from: '07:00', text: '元気に朝活！' }, 
+    { from: '08:00', text: '朝食タイム' }, 
+    { from: '09:00', text: '授業中！' }, 
+    { from: '12:00', text: '昼食！\nカレーが美味しい！' }, 
+    { from: '13:00', text: '授業中！' }, 
+    { from: '17:00', text: 'BBQタイムだぁ！！' }, 
+    { from: '20:00', text: '２日目最後の授業！' }, 
+    { from: '21:00', text: 'お疲れ様でした！' }, 
+  ],
+  // ── 3日目 8/10（月） ─────────────────────
+  '2026-08-10': [
+    { from: '00:00', text: '早く寝ましょう！' }, 
+    { from: '04:00', text: 'おはよう！\n合宿最終日！' }, 
+    { from: '07:00', text: '朝食タイム' }, 
+    { from: '08:00', text: '元気に朝活！' }, 
+    { from: '09:00', text: '最終調整\n戦いに備える' }, 
+    { from: '10:30', text: '戦いだぁ！！！' }, 
+    { from: '12:00', text: '閉講式'},
+    { from: '13:00', text: 'お疲れ様！\n帰るまでが合宿！' }, 
+    { from: '19:00', text: '合宿の報告をしよう！' }, 
+  ],
+};
+
+/**
+ * 吹き出しに表示する文言を「今日の日付・時刻」から決定して返す。
+ *
+ * ・合宿前（〜8/6）      … 「あと○○日！」（8/8までの残り日数を自動計算）
+ * ・前日（8/7）          … 「いよいよ明日！準備しよう！」
+ * ・合宿中（8/8〜8/10）  … CAMP_SCHEDULE の時間帯スロットに従う
+ * ・合宿後（8/11〜）     … 「ブログ公開中～♪」
+ *
+ * @returns {string|null} 表示文言。null の場合は吹き出しを出さない。
+ */
+function getSidebarBubbleMessage() {
+  // 月は 0 始まりなので 8月 = 7。
+  const START = new Date(2026, 7, 8);  // 合宿初日 8/8
+  const EVE   = new Date(2026, 7, 7);  // 前日 8/7
+  const END   = new Date(2026, 7, 10); // 最終日 8/10
+
+  const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+  // 今日を 0:00 に丸める（時刻のブレを除く）
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // 前日（8/7）
+  if (today.getTime() === EVE.getTime()) {
+    return 'いよいよ明日！準備しよう！';
+  }
+
+  // 前日より前 → カウントダウン
+  if (today.getTime() < EVE.getTime()) {
+    const days = Math.round((START.getTime() - today.getTime()) / MS_PER_DAY);
+    return `あと${days}日！`;
+  }
+
+  // 合宿期間中（8/8〜8/10）→ 時間帯スロットで判定
+  if (today.getTime() >= START.getTime() && today.getTime() <= END.getTime()) {
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, '0');
+    const d = String(today.getDate()).padStart(2, '0');
+    const slots = CAMP_SCHEDULE[`${y}-${m}-${d}`];
+    if (!slots || !slots.length) return null;
+
+    const curMin = now.getHours() * 60 + now.getMinutes();
+    let text = null;
+    for (const slot of slots) {
+      const [h, mi] = slot.from.split(':').map(Number);
+      if (curMin >= h * 60 + mi) text = slot.text;
+    }
+    return text;
+  }
+
+  // 合宿後（8/11〜）
+  return 'ブログ公開中～♪';
 }
 
 /**

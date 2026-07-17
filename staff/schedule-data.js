@@ -160,7 +160,7 @@ window.STAFF_SCHEDULE_DAYS = [
       {
         time: '12:00～13:00',
         location: '研修室1～4',
-        activity: '閉会式',
+        activity: '閉講式',
         note: '成果の確認！',
       },
       {
