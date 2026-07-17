@@ -43,7 +43,7 @@ window.STAFF_SCHEDULE_DAYS = [
         time: '15:00～17:00',
         location: '研修室1～4',
         activity: '授業',
-        note: '',
+        note: '今回のトランプゲームのルール確認<br>初期コードを理解①',
       },
       {
         time: '17:00～18:00',
@@ -61,7 +61,7 @@ window.STAFF_SCHEDULE_DAYS = [
         time: '19:00～21:00',
         location: '研修室1～4',
         activity: '授業',
-        note: '',
+        note: '初期コードを理解②',
       },
       {
         time: '21:00～24:00',
@@ -96,7 +96,7 @@ window.STAFF_SCHEDULE_DAYS = [
         time: '9:00～12:00',
         location: '研修室1～4',
         activity: '授業',
-        note: '',
+        note: 'ターンの得点で場合分け<br>山札のカウンティング①',
       },
       {
         time: '12:00～13:00',
@@ -108,11 +108,11 @@ window.STAFF_SCHEDULE_DAYS = [
         time: '13:00～17:00',
         location: '研修室1～4',
         activity: '授業',
-        note: '',
+        note: '山札のカウンティング②<br>ルールや進め方の共有<br>戦略を実装していく！',
       },
       {
         time: '17:00～20:00',
-        location: '外・ピラミッド<br>TAKIBI1～4',
+        location: '外・ピラミッド<br>TAKIBI1～3，6',
         activity: 'BBQ',
         note: 'コミュニケーションを楽しもう',
       },
@@ -120,7 +120,7 @@ window.STAFF_SCHEDULE_DAYS = [
         time: '20:00～21:00',
         location: '研修室1～4',
         activity: '授業',
-        note: '',
+        note: '＜続＞戦略を実装していく！',
       },
       {
         time: '21:00～24:00',
