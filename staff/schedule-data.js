@@ -112,7 +112,7 @@ window.STAFF_SCHEDULE_DAYS = [
       },
       {
         time: '17:00～20:00',
-        location: '外・ピラミッド<br>TAKIBI1～3，6',
+        location: '外・ピラミッド<br>TAKIBI1～4，6',
         activity: 'BBQ',
         note: 'コミュニケーションを楽しもう',
       },
